@@ -21,24 +21,14 @@ namespace Task.Controllers
         [HttpPost]
         public ActionResult<List<ModelTask>> AdicionaTask(ModelTask novo)
         {
-            if (novo.Id == 0 && modelTasks.Count > 0)
-            {
-                novo.Id = modelTasks[modelTasks.Count - 1].Id + 1;
-                novo.Title = modelTasks.Count.ToString();
-                novo.Description = modelTasks.Count.ToString();
-
-            }
-
-            if (novo.Description.Length >= 10)
-            {
-                modelTasks.Add(novo);
-                return Ok(modelTasks);
-
-            }
-            else
-            {
+            if (novo.Description.Length < 10)
                 return BadRequest("Necessario minimo 10 caracteres");
-            }
+
+            novo.Id = modelTasks.Count > 0 ? modelTasks[modelTasks.Count - 1].Id + 1 : 1;
+
+            modelTasks.Add(novo);
+
+            return Ok(modelTasks);
         }
 
         [HttpDelete("{Id}")]
